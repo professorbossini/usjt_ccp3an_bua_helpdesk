@@ -31,45 +31,62 @@ public class ChamadoAdapter extends ArrayAdapter <Chamado> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Chamado chamadoDaVez = getItem(position);
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View raiz = inflater.inflate(
-                R.layout.list_item,
-                parent,
-                false
-        );
-        ImageView  filaIconImageView =
-                raiz.findViewById(R.id.filaIconImageView);
-        TextView descricaoChamadoNaFilaTextView =
-                raiz.findViewById(R.id.descricaoChamadoNaFilaTextView);
-        TextView statusChamadoNaFilaTextView =
-                raiz.findViewById(R.id.statusChamadoNaFilaTextView);
-        TextView dataAberturaChamadoNaFilaTextView =
-                raiz.findViewById(R.id.dataAberturaChamadoNaFilaTextView);
-        TextView dataFechamentoChamadoNaFilaTextView =
-                raiz.findViewById(R.id.dataFechamentoChamadoNaFilaTextView);
+        ChamadoViewHolder vh;
+        if (convertView == null){
+            LayoutInflater inflater = LayoutInflater.from(context);
+            convertView = inflater.inflate(
+                    R.layout.list_item,
+                    parent,
+                    false
+            );
+            vh = new ChamadoViewHolder();
+            vh.filaIconImageView =
+                    convertView.findViewById(R.id.filaIconImageView);
+            vh.descricaoChamadoNaFilaTextView =
+                    convertView.findViewById(R.id.descricaoChamadoNaFilaTextView);
+            vh.statusChamadoNaFilaTextView =
+                    convertView.findViewById(R.id.statusChamadoNaFilaTextView);
+            vh.dataAberturaChamadoNaFilaTextView =
+                    convertView.findViewById(R.id.dataAberturaChamadoNaFilaTextView);
+            vh.dataFechamentoChamadoNaFilaTextView =
+                    convertView.findViewById(R.id.dataFechamentoChamadoNaFilaTextView);
 
-        filaIconImageView.setImageResource(
+            convertView.setTag(vh);
+        }
+        vh = (ChamadoViewHolder) convertView.getTag();
+        Chamado chamadoDaVez = getItem(position);
+
+
+
+        vh.filaIconImageView.setImageResource(
                 chamadoDaVez.getFila().getIconId()
         );
-        descricaoChamadoNaFilaTextView.setText(
+        vh.descricaoChamadoNaFilaTextView.setText(
                 chamadoDaVez.getDescricao()
         );
-        statusChamadoNaFilaTextView.setText(
+        vh.statusChamadoNaFilaTextView.setText(
                 chamadoDaVez.getStatus()
         );
 
-        dataAberturaChamadoNaFilaTextView.setText(
+        vh.dataAberturaChamadoNaFilaTextView.setText(
                 DateHelper.format(
                         chamadoDaVez.getDataAbertura()
                 )
         );
         if (chamadoDaVez.getDataFechamento() != null)
-            dataFechamentoChamadoNaFilaTextView.setText(
+            vh.dataFechamentoChamadoNaFilaTextView.setText(
                     DateHelper.format(chamadoDaVez.getDataFechamento())
             );
 
-        return raiz;
+        return convertView;
 
+    }
+
+    private class ChamadoViewHolder {
+        public ImageView filaIconImageView;
+        public TextView descricaoChamadoNaFilaTextView;
+        public TextView statusChamadoNaFilaTextView;
+        public TextView dataAberturaChamadoNaFilaTextView;
+        public TextView dataFechamentoChamadoNaFilaTextView;
     }
 }
